@@ -1,0 +1,7 @@
+target
+Cargo.lock
+build/
+iso/
+.token
+*.swp
+.gdb_history

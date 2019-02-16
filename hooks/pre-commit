@@ -1,0 +1,23 @@
+#!/bin/bash
+
+rustfmt --version &> /dev/null
+if [[ $? != 0 ]]; then
+  echo "Seems rustfmt is not installed."
+  echo "Install rustfmt and commit again."
+  exit 1
+fi 
+
+WORKING_DIR=$(git rev-parse --show-toplevel)
+for file in $(find $WORKING_DIR); do
+  if [ ${file: -3} == ".rs" ]; then 
+    rustfmt --skip-children --unstable-features $file &>/dev/null 
+    if [[ $? != 0 ]]; then
+      echo "Failed when formatting $file"
+      exit 1
+    fi
+    git add $file
+  fi 
+done
+
+echo "Pre-commit operation finished!"
+exit 0
